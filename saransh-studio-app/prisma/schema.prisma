@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  BOOKED
+  CLOSED
+}
+
+enum PortfolioCategory {
+  WEDDING
+  COUPLES
+  PRE_WEDDING
+  PORTRAITS
+  CORPORATE
+  EVENTS
+  PRODUCT
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PortfolioCategoryModel {
+  id          String              @id @default(cuid())
+  name        PortfolioCategory   @unique
+  slug        String              @unique
+  description String?
+  image       String?
+  displayOrder Int                @default(0)
+  isActive    Boolean             @default(true)
+  projects    PortfolioProject[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+model PortfolioProject {
+  id          String                 @id @default(cuid())
+  title       String
+  slug        String                 @unique
+  categoryId  String
+  category    PortfolioCategoryModel @relation(fields: [categoryId], references: [id])
+  location    String
+  description String
+  coverImage  String
+  featured    Boolean                @default(false)
+  published   Boolean                @default(true)
+  displayOrder Int                   @default(0)
+  gallery     PortfolioImage[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+}
+
+model PortfolioImage {
+  id          String           @id @default(cuid())
+  imageUrl    String
+  alt         String?
+  displayOrder Int             @default(0)
+  projectId   String
+  project     PortfolioProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Film {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String?
+  category    String
+  posterImage String
+  videoUrl    String
+  duration    String?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  displayOrder Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  type        String // "PHOTOGRAPHY" or "CINEMATOGRAPHY"
+  description String
+  image       String
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  displayOrder Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Package {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  price       String?
+  priceLabel  String?
+  description String
+  featured    Boolean          @default(false)
+  published   Boolean          @default(true)
+  displayOrder Int             @default(0)
+  features    PackageFeature[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model PackageFeature {
+  id        String   @id @default(cuid())
+  feature   String
+  packageId String
+  package   Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  displayOrder Int   @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  clientName  String
+  review      String
+  eventType   String
+  location    String
+  rating      Int      @default(5)
+  published   Boolean  @default(true)
+  displayOrder Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Enquiry {
+  id          String        @id @default(cuid())
+  name        String
+  phone       String
+  email       String?
+  eventType   String
+  eventDate   String
+  location    String?
+  message     String?
+  status      EnquiryStatus @default(NEW)
+  notes       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model MediaAsset {
+  id        String   @id @default(cuid())
+  url       String
+  publicId  String?
+  format    String
+  size      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SocialLink {
+  id        String   @id @default(cuid())
+  platform  String   @unique
+  url       String
+  icon      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSetting {
+  id            String   @id @default(cuid())
+  siteName      String   @default("Saransh Studio")
+  phone         String   @default("+91 90277 31570")
+  whatsapp      String   @default("https://wa.me/919027731570")
+  email         String   @default("contact@saranshstudio.com")
+  address       String   @default("Sadar Tehsil Main Rd, East Model Town, Gandhi Nagar, Pocket B, Nehru Nagar III, Nehru Nagar, Ghaziabad, Uttar Pradesh 201001")
+  googleMapsUrl String?
+  instagramUrl  String?
+  youtubeUrl    String?
+  youtubeHandle String?
+  footerText    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SeoSetting {
+  id          String   @id @default(cuid())
+  page        String   @unique
+  title       String
+  description String
+  ogImage     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

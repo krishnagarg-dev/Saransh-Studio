@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #F4F1EB;
+  --color-warm-beige: #EAE5DC;
+  --color-surface: #DDD7CC;
+  --color-charcoal: #211F1C;
+  --color-muted-gray: #6D6860;
+  --color-border: #D5CFC5;
+  --color-dark-warm: #25221F;
+  --color-ivory-light: #F4F1EB;
+}
+
+:root {
+  --background: var(--color-ivory);
+  --foreground: var(--color-charcoal);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Custom Utilities / Theme overrides */
+.font-serif {
+  font-family: var(--font-serif), Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+@keyframes slow-zoom {
+  from { transform: scale(1.05); }
+  to { transform: scale(1.1); }
+}
+.animate-slow-zoom {
+  animation: slow-zoom 10s ease-in-out infinite alternate;
+}
