@@ -1,0 +1,28 @@
+# IDE / AI tools
+.agents/
+.claude/
+.cursor/
+.devin/
+
+# Root dependencies
+node_modules/
+
+# Saransh Studio app dependencies
+saransh-studio-app/node_modules/
+
+# Next.js
+saransh-studio-app/.next/
+saransh-studio-app/out/
+
+# Environment / secrets
+.env
+.env.*
+saransh-studio-app/.env
+saransh-studio-app/.env.*
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
